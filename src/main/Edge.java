@@ -1,13 +1,15 @@
 package main;
 
 public class Edge {
-	private CityNode origin;	
+	private CityNode origin;
 	private CityNode destination;
+	private String name;
 	private int distance;
-	
+
 	public Edge(CityNode origion, CityNode destination, int distance) {
 		this.origin = origion;
 		this.destination = destination;
+		this.name = origin.getName() + destination.getName();
 		this.distance = distance;
 	}
 
@@ -15,16 +17,12 @@ public class Edge {
 		return origin;
 	}
 
-	public void setOrigin(CityNode origin) {
-		this.origin = origin;
-	}
-
 	public CityNode getDestination() {
 		return destination;
 	}
 
-	public void setDestination(CityNode destination) {
-		this.destination = destination;
+	public String getName() {
+		return name;
 	}
 
 	public int getDistance() {
@@ -34,7 +32,4 @@ public class Edge {
 	public void setDistance(int distance) {
 		this.distance = distance;
 	}
-	
-	
-	
 }
