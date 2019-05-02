@@ -17,7 +17,7 @@ public class Graph {
 					+ connection.getDestination().getName());
 		}
 	}
-
+	// a utility class to match a string to an object
 	public CityNode findCity(String city) {
 		for (CityNode ct : getCities()) {
 			if (city.matches(ct.getName())) {
@@ -26,7 +26,8 @@ public class Graph {
 		}
 		return null;
 	}
-
+	
+	// adding a node by a String, making sure it does not already exists
 	public void addCity(String name) {
 		if (findCity(name) == null) {
 			getCities().add(new CityNode(name));
@@ -35,6 +36,7 @@ public class Graph {
 		}
 	}
 
+	//Java 8 method to remove Objects from an ArrayList while iterating over it
 	public boolean removeCity(CityNode city) {
 		connections.removeIf(con -> (con.getOrigin().equals(city) || con.getDestination().equals(city)));
 		return true;
@@ -63,7 +65,7 @@ public class Graph {
 		StringBuilder str = new StringBuilder();
 		str.append("\nAvailible cities:\n");
 		for (CityNode ct : getCities()) {
-			str.append(ct.getName());
+			str.append(ct.getName() + "\n");
 		}
 		str.append("\n");
 		return str.toString();
@@ -87,6 +89,15 @@ public class Graph {
 			}
 		}
 		return false;
+	}
+	
+	public Edge getConnection(String name) {
+		for (Edge con : connections) {
+			if (con.getName().equals(name)) {				
+				return con;
+			}
+		}
+		return null;
 	}
 
 	public boolean removeConnection(String name) {

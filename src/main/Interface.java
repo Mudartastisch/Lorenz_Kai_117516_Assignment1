@@ -4,7 +4,9 @@ import java.util.Scanner;
 
 public class Interface {
 	static Scanner scn = new Scanner(System.in);
+	static boolean numeric = true;
 
+	// just some example values
 	private static void generateExamples(Graph graph) {
 
 		System.out.println("Generating City");
@@ -25,7 +27,7 @@ public class Interface {
 	}
 
 	public static void printGraph(Graph graph) {
-		System.out.println(graph.toString());
+		System.out.println(graph.graphToString());
 	}
 
 	public static void printCities(Graph graph) {
@@ -37,16 +39,18 @@ public class Interface {
 		System.out.println("help --- print usage");
 		System.out.println("add city 'cityName' ---- Add a new City");
 		System.out.println(
-				"add connection 'cityName1' 'cityName2' 'distance' ---- Add a new connection between existing cities");
+				"add connection 'cityName1' 'cityName2' 'distance(integer)' ---- Add a new connection between existing cities");
 		System.out.println("remove connection 'connectionName' ---- remove a connection");
 		System.out.println("remove city 'cityName' ---- remove a city and it's connection");
 		System.out.println("clear ---- remove all cities and connections");
+		System.out.println("update 'connectionName' 'newDistance(integer)'");
 		System.out.println("print graph ---- show all connections in the graph");
 		System.out.println("print cities ---- show all cities in your session");
 		System.out.println("exit ---- end the programm");
 		System.out.println("\n");
 	}
 
+	// this entire block is about the command parsing
 	private static void parse(String line, Graph graph) {
 		String[] parsing = line.split(" ");
 		for (String str : parsing) {
@@ -54,16 +58,13 @@ public class Interface {
 		}
 		switch (parsing[0]) {
 		case "add":
-			System.out.println("Debug: case add");
 			switch (parsing[1]) {
 			case "city":
-				System.out.println("Debug: case add city");
 				graph.addCity(parsing[2]);
 				System.out.println("added City");
 				break;
 
 			case "connection":
-				System.out.println("Debug: case add connection");
 				if (!graph.findCity(parsing[2]).equals(null) && !graph.findCity(parsing[3]).equals(null)) {
 					graph.addConnection(new Edge(graph.findCity(parsing[2]), graph.findCity(parsing[3]),
 							Integer.parseInt(parsing[4])));
@@ -74,16 +75,13 @@ public class Interface {
 				break;
 
 			default:
-				System.out.println("Debug: case add default");
 				System.out.println("invalid add command structure");
 			}
 			break;
 
 		case "remove":
-			System.out.println("Debug: case remove");
 			switch (parsing[1]) {
 			case "connection":
-				System.out.println("Debug: case remove connection");
 				if (graph.removeConnection(parsing[2])) {
 					System.out.println("done");
 				} else {
@@ -92,7 +90,6 @@ public class Interface {
 				break;
 
 			case "city":
-				System.out.println("Debug: case remove city");
 				if (graph.removeCity(graph.findCity(parsing[2]))) {
 					graph.getCities().remove(graph.findCity(parsing[2]));
 					System.out.println("removed all connections and city it self " + parsing[2]);
@@ -102,27 +99,41 @@ public class Interface {
 				break;
 
 			default:
-				System.out.println("Debug: case remove default");
 				System.out.println("invalid remove command structure");
 				break;
 			}
 			break;
 		case "clear":
-			System.out.println("Debug: case clear");
 			graph.clear();
 			System.out.println("removed all cities and connections");
 			break;
 
+		case "update":
+			try {
+				if (graph.connectionExists(graph.getConnection(parsing[2]))) {
+					try {
+						int num = Integer.parseInt(parsing[3]);
+					} catch (NumberFormatException e) {
+						numeric = false;
+					}
+					if (numeric) {
+						graph.updateDistance(graph.getConnection(parsing[2]), Integer.parseInt(parsing[3]));
+						System.out.println("done");
+					}
+				}
+			} catch (NullPointerException e) {
+				System.out.println("NullPointer");
+				System.out.println("No connection matched you input");
+				e.printStackTrace();
+			}
+
 		case "print":
-			System.out.println("Debug: case print");
 			switch (parsing[1]) {
 			case "graph":
-				System.out.println("Debug: case print graph");
 				printGraph(graph);
 				break;
 
 			case "cities":
-				System.out.println("Debug: case print city");
 				printCities(graph);
 				break;
 			}
@@ -131,7 +142,7 @@ public class Interface {
 		case "exit":
 			System.out.println("Goodby!");
 			System.exit(0);
-			
+
 		case "help":
 			help();
 			break;
