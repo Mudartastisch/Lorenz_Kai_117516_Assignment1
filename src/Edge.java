@@ -1,5 +1,3 @@
-package main;
-
 public class Edge {
 	private CityNode origin;
 	private CityNode destination;
