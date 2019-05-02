@@ -53,9 +53,7 @@ public class Interface {
 	// this entire block is about the command parsing
 	private static void parse(String line, Graph graph) {
 		String[] parsing = line.split(" ");
-		for (String str : parsing) {
-			System.out.println(str);
-		}
+
 		switch (parsing[0]) {
 		case "add":
 			switch (parsing[1]) {
