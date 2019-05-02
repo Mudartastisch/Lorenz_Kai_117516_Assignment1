@@ -110,6 +110,7 @@ public class Interface {
 			try {
 				if (graph.connectionExists(graph.getConnection(parsing[2]))) {
 					try {
+						@SuppressWarnings("unused")
 						int num = Integer.parseInt(parsing[3]);
 					} catch (NumberFormatException e) {
 						numeric = false;
